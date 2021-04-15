@@ -70,7 +70,7 @@ const main = ({ fetchUser, currentUser }) => {
         options={{
           tabBarLabel: "Profile",
           tabBarIcon: ({ color, size }) => (
-            <AntDesign name="plussquareo" size={27} color="black" />
+            <Ionicons name="md-add-circle-outline" size={30} color="black" />
           ),
         }}
       />

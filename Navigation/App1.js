@@ -44,10 +44,16 @@ export default function App1() {
 
   if (!loaded) {
     return (
-      <View>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <ActivityIndicator
           animating={true}
-          color={Colors.amber700}
+          color={Colors.blue400}
           size="large"
         />
       </View>
