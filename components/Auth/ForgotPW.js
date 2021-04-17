@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, StatusBar, Image, Alert } from "react-native";
-import { Button, Text, TextInput } from "react-native-paper";
+import { Button, Text, TextInput, Snackbar } from "react-native-paper";
 import { auth } from "../../firebase";
 
 export default function Login({ navigation }) {
@@ -9,23 +9,30 @@ export default function Login({ navigation }) {
   const [securedpassword, setSecuredpassword] = React.useState(true);
   const [Email, setEmail] = React.useState("");
   const [Password, setPassword] = React.useState("");
+  const [label, setLabel] = React.useState("");
   const [color, setColor] = React.useState("#9d9d9d");
-  const onSignin = () => {
+
+  const [visible, setVisible] = React.useState(false);
+
+  const onToggleSnackBar = () => setVisible(!visible);
+
+  const onDismissSnackBar = () => setVisible(false);
+
+  const onPasswordReset = () => {
     auth
-      .signInWithEmailAndPassword(Email, Password)
-      .then((result) => {
-        console.log(result);
+      .sendPasswordResetEmail(Email)
+      .then(() => {
+        onToggleSnackBar();
+        visible ? "Hide" : "Show";
+        setLabel(
+          `reset password link send back to at your this ${Email} mail id `
+        );
       })
       .catch((error) => {
-        console.log(error);
+        setLabel(error);
+        onToggleSnackBar();
+        visible ? "Hide" : "Show";
       });
-  };
-  const eyeColor = () => {
-    if (!securedpassword) {
-      setColor("#9d9d9d");
-    } else {
-      setColor("#3d3d3d");
-    }
   };
   return (
     <View style={{ backgroundColor: "#fff", flex: 1 }}>
@@ -42,45 +49,26 @@ export default function Login({ navigation }) {
           mode="outlined"
         />
 
-        <TextInput
-          Password
-          label="Password"
-          value={Password}
-          onChangeText={(text) => setPassword(text)}
-          style={{ paddingBottom: 20 }}
-          mode="outlined"
-          secureTextEntry={securedpassword}
-          right={
-            <TextInput.Icon
-              icon={"eye"}
-              size={30}
-              color={color}
-              onPress={() => {
-                setSecuredpassword(!securedpassword);
-                eyeColor();
-              }}
-            />
-          }
-        />
-
-        <Button style={styles.button} mode="contained" onPress={onSignin}>
-          Sign in
-        </Button>
         <Button
-          uppercase={false}
           style={styles.button}
-          onPress={() => navigation.navigate("ForgotPW")}
+          mode="contained"
+          onPress={onPasswordReset}
         >
-          Forgot password?
-        </Button>
-        <Button
-          uppercase={false}
-          style={styles.button}
-          onPress={() => navigation.navigate("Register")}
-        >
-          Don't have account? Signup here
+          Verify
         </Button>
       </View>
+      <Snackbar
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: "Undo",
+          onPress: () => {
+            navigation.navigate("Login");
+          },
+        }}
+      >
+        {label}
+      </Snackbar>
     </View>
   );
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, StatusBar, Image, Alert } from "react-native";
-import { Button, Text, TextInput } from "react-native-paper";
+import { Button, Text, TextInput, Snackbar } from "react-native-paper";
 import { auth, db } from "../../firebase";
 
 export default function signup({ navigation }) {
@@ -10,17 +10,47 @@ export default function signup({ navigation }) {
   const [Email, setEmail] = React.useState("");
   const [Password, setPassword] = React.useState("");
   const [color, setColor] = React.useState("#9d9d9d");
+
+  //SnackBar manage
+  const [label, setLabel] = React.useState("");
+  const [visible, setVisible] = React.useState(false);
+  const onToggleSnackBar = () => setVisible(!visible);
+  const onDismissSnackBar = () => setVisible(false);
+
   const onSignUp = () => {
     auth
       .createUserWithEmailAndPassword(Email, Password)
       .then((result) => {
+        auth.currentUser
+          .sendEmailVerification()
+          .then(() => {
+            console.log("email send");
+            onToggleSnackBar();
+            visible ? "Hide" : "Show";
+            setLabel(
+              `Verification link has been sent at ${Email} verify from your mail to Login `
+            );
+          })
+          .catch((error) => {
+            console.log(error);
+            onToggleSnackBar();
+            visible ? "Hide" : "Show";
+          });
         console.log(auth.currentUser.uid);
-        db.collection("users").doc(auth.currentUser.uid).set({
-          Name,
-          Email,
-          num,
-        });
-        console.log(result);
+        if (auth.currentUser.emailVerified) {
+          db.collection("users").doc(auth.currentUser.uid).set({
+            Name,
+            Email,
+            num,
+          });
+          console.log(result);
+        } else {
+          setLabel(
+            `reset password link send back to at your this ${Email} mail id `
+          );
+          onToggleSnackBar();
+          visible ? "Hide" : "Show";
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -97,6 +127,18 @@ export default function signup({ navigation }) {
           already have an account? Login here
         </Button>
       </View>
+      <Snackbar
+        visible={visible}
+        onDismiss={onDismissSnackBar}
+        action={{
+          label: "Undo",
+          onPress: () => {
+            navigation.navigate("Login");
+          },
+        }}
+      >
+        {label}
+      </Snackbar>
     </View>
   );
 }

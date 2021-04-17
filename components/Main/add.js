@@ -1,3 +1,5 @@
+//This page is for clicking or selecting picture to upload
+
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { Camera } from "expo-camera";
@@ -5,7 +7,7 @@ import { Button, IconButton } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
 import { MaterialIcons, FontAwesome, AntDesign } from "@expo/vector-icons";
 
-export default function App() {
+export default function Add({ navigation }) {
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [hasGalleryPermission, setHasGalleryPermission] = useState(null);
   const [camera, setCamera] = useState(null);
@@ -113,7 +115,11 @@ export default function App() {
           />
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("Save", { image });
+          }}
+        >
           <AntDesign
             name="checkcircle"
             color={"#000"}

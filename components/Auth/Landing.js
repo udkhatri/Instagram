@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { Button } from "react-native-paper";
+import { Button, Colors, Divider, DefaultTheme } from "react-native-paper";
 
 const Landing = ({ navigation }) => {
   return (
@@ -19,10 +19,39 @@ const Landing = ({ navigation }) => {
       >
         Sign up
       </Button>
+      <Divider />
+      <Text style={{ fontWeight: "bold", alignSelf: "center", marginTop: 10 }}>
+        Or continue with
+      </Text>
       <Button
         style={styles.button}
-        mode="outlined"
+        mode="contained"
+        icon="google"
+        compact={true}
         onPress={() => console.log("fb")}
+        theme={{
+          colors: {
+            ...DefaultTheme.colors,
+            primary: "#4285f4",
+            accent: "#f1c40f",
+          },
+        }}
+      >
+        Google
+      </Button>
+      <Button
+        style={styles.button}
+        mode="contained"
+        icon="facebook"
+        compact={true}
+        onPress={() => console.log("fb")}
+        theme={{
+          colors: {
+            ...DefaultTheme.colors,
+            primary: "#3b5998",
+            accent: "#f1c40f",
+          },
+        }}
       >
         facebook
       </Button>
@@ -39,8 +68,8 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   button: {
-    paddingVertical: 5,
     marginVertical: 10,
+    paddingVertical: 5,
   },
 });
 export default Landing;
