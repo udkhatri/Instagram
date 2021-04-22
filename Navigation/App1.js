@@ -28,25 +28,26 @@ const Stack = createStackNavigator();
 export default function App1({ navigation }) {
   const [loaded, setLoaded] = useState(false);
   const [login, setLogin] = useState(false);
-  const [emailVerified, setEmailVerified] = useState(false);
+  // const [emailVerified, setEmailVerified] = useState(false);
   useEffect(() => {
     auth.onAuthStateChanged((user) => {
       if (!user) {
         setLogin(false);
-        console.log(user + "!user");
+        console.log(user + " !user");
         setLoaded(true);
+        // setEmailVerified(false);
+        // console.log(emailVerified + " is verification status");
       } else {
-        if (user.emailVerified) {
-          setEmailVerified(true);
-          setLogin(true);
-          setLoaded(true);
-          console.log(user.emailVerified);
-        }
+        setLogin(true);
+        setLoaded(true);
+        // setEmailVerified(true);
+        // console.log(emailVerified + " is verification status");
       }
     });
-  }, [emailVerified]);
+  }, []);
 
   if (!loaded) {
+    console.log(loaded);
     return (
       <View
         style={{

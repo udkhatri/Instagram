@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { StyleSheet, View, StatusBar, Image, Alert } from "react-native";
-import { Button, Text, TextInput, Snackbar } from "react-native-paper";
+import { Button, Text, TextInput, Snackbar, Banner } from "react-native-paper";
 import { auth, db } from "../../firebase";
 
 export default function signup({ navigation }) {
@@ -14,48 +14,26 @@ export default function signup({ navigation }) {
   //SnackBar manage
   const [label, setLabel] = React.useState("");
   const [visible, setVisible] = React.useState(false);
-  const onToggleSnackBar = () => setVisible(!visible);
-  const onDismissSnackBar = () => setVisible(false);
 
   const onSignUp = () => {
     auth
       .createUserWithEmailAndPassword(Email, Password)
       .then((result) => {
-        auth.currentUser
-          .sendEmailVerification()
-          .then(() => {
-            console.log("email send");
-            onToggleSnackBar();
-            visible ? "Hide" : "Show";
-            setLabel(
-              `Verification link has been sent at ${Email} verify from your mail to Login `
-            );
-          })
-          .catch((error) => {
-            console.log(error);
-            onToggleSnackBar();
-            visible ? "Hide" : "Show";
-          });
-        console.log(auth.currentUser.uid);
-        if (auth.currentUser.emailVerified) {
-          db.collection("users").doc(auth.currentUser.uid).set({
-            Name,
-            Email,
-            num,
-          });
-          console.log(result);
-        } else {
-          setLabel(
-            `reset password link send back to at your this ${Email} mail id `
-          );
-          onToggleSnackBar();
-          visible ? "Hide" : "Show";
-        }
+        auth.currentUser.sendEmailVerification();
+        db.collection("users").doc(auth.currentUser.uid).set({
+          Name,
+          Email,
+          num,
+        });
+        console.log(result);
       })
       .catch((error) => {
         console.log(error);
+        setLabel(error.message);
+        setVisible(true);
       });
   };
+
   const eyeColor = () => {
     if (!securedpassword) {
       setColor("#9d9d9d");
@@ -65,6 +43,30 @@ export default function signup({ navigation }) {
   };
   return (
     <View style={{ backgroundColor: "#fff", flex: 1 }}>
+      <Banner
+        visible={visible}
+        actions={[
+          {
+            label: "Ok",
+            onPress: () => setVisible(false),
+          },
+          {
+            label: "Learn more",
+            onPress: () => setVisible(false),
+          },
+        ]}
+        contentStyle={{
+          backgroundColor: "#ecc",
+          borderRadius: 9,
+        }}
+        style={{
+          margin: 10,
+          borderRadius: 9,
+          marginBottom: 20,
+        }}
+      >
+        <Text style={{ fontSize: 15, color: "#f00" }}>{label}</Text>
+      </Banner>
       <View style={styles.container}>
         <Text style={{ fontSize: 40, marginBottom: 20 }}>Sign up</Text>
         <TextInput
@@ -127,18 +129,6 @@ export default function signup({ navigation }) {
           already have an account? Login here
         </Button>
       </View>
-      <Snackbar
-        visible={visible}
-        onDismiss={onDismissSnackBar}
-        action={{
-          label: "Undo",
-          onPress: () => {
-            navigation.navigate("Login");
-          },
-        }}
-      >
-        {label}
-      </Snackbar>
     </View>
   );
 }

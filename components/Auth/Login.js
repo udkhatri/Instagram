@@ -1,11 +1,12 @@
 import React from "react";
 import { StyleSheet, View, StatusBar, Image, Alert } from "react-native";
-import { Button, Text, TextInput } from "react-native-paper";
+import { Button, Text, TextInput, Banner } from "react-native-paper";
 import { auth } from "../../firebase";
 
 export default function Login({ navigation }) {
-  const [num, setNum] = React.useState("");
-  const [Name, setName] = React.useState("");
+  const [label, setLabel] = React.useState("");
+  const [visible, setVisible] = React.useState(false);
+
   const [securedpassword, setSecuredpassword] = React.useState(true);
   const [Email, setEmail] = React.useState("");
   const [Password, setPassword] = React.useState("");
@@ -18,6 +19,8 @@ export default function Login({ navigation }) {
       })
       .catch((error) => {
         console.log(error);
+        setLabel(error.message);
+        setVisible(true);
       });
   };
   const eyeColor = () => {
@@ -29,6 +32,26 @@ export default function Login({ navigation }) {
   };
   return (
     <View style={{ backgroundColor: "#fff", flex: 1 }}>
+      <Banner
+        visible={visible}
+        actions={[
+          {
+            label: "Ok",
+            onPress: () => setVisible(false),
+          },
+        ]}
+        contentStyle={{
+          backgroundColor: "#ecc",
+          borderRadius: 9,
+        }}
+        style={{
+          margin: 10,
+          borderRadius: 9,
+          marginBottom: 20,
+        }}
+      >
+        <Text style={{ fontSize: 15, color: "#f00" }}>{label}</Text>
+      </Banner>
       <View style={styles.container}>
         <Text style={{ fontSize: 40, marginBottom: 20 }}>Sign in</Text>
 
