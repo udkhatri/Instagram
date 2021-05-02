@@ -1,9 +1,6 @@
 //react redux
 import React, { useEffect, useState } from "react";
-import { View, Text } from "react-native";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { fetchUser } from "../redux/actions/index";
+import { fetchUser, fetchUserPosts } from "./UserFunctions";
 
 //screens
 import feedScreen from "./Main/feed";
@@ -14,18 +11,14 @@ import notifiationScreen from "./Main/notification";
 //bottom tab navigation
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
-import BottomTab from "../Navigation/BottomTab";
 const Tab = createBottomTabNavigator();
 const emptyScreen = () => {
   return null;
 };
-const main = ({ fetchUser, currentUser }) => {
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
+const main = () => {
   return (
     <Tab.Navigator
+      shifting={true}
       initialRouteName="Home"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
@@ -55,7 +48,11 @@ const main = ({ fetchUser, currentUser }) => {
         activeBackgroundColor: "#f1f1f1",
       }}
     >
-      <Tab.Screen name="Home" component={feedScreen} />
+      <Tab.Screen
+        name="Home"
+        options={{ title: "instagram" }}
+        component={feedScreen}
+      />
       <Tab.Screen name="Search" component={searchScreen} />
       {/* to redirect to different screen on pressing add button */}
       <Tab.Screen
@@ -79,9 +76,5 @@ const main = ({ fetchUser, currentUser }) => {
     </Tab.Navigator>
   );
 };
-const mapStateToProps = (store) => ({
-  currentUser: store.userState.currentUser,
-});
-const mapDispatchProps = (dispatch) =>
-  bindActionCreators({ fetchUser }, dispatch);
-export default connect(null, mapDispatchProps)(main);
+
+export default main;

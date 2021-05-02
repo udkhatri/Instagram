@@ -16,13 +16,8 @@ import SaveScreen from "../components/Main/Save";
 //components and redux
 import { auth, db } from "../firebase";
 import { Text, View } from "react-native";
-import { Provider } from "react-redux";
-import { createStore, applyMiddleware } from "redux";
-import rootReducer from "../redux/reducer";
-import thunk from "redux-thunk";
 import { ActivityIndicator, Colors } from "react-native-paper";
 
-const store = createStore(rootReducer, applyMiddleware(thunk));
 const Stack = createStackNavigator();
 
 export default function App1({ navigation }) {
@@ -86,28 +81,27 @@ export default function App1({ navigation }) {
     );
   }
   return (
-    <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="main"
-            component={MainScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="Add"
-            component={addScreen}
-            navigation={navigation}
-          />
-          <Stack.Screen
-            options={{ title: "New Post" }}
-            name="Save"
-            component={SaveScreen}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </Provider>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="main"
+          component={MainScreen}
+          options={{
+            headerShown: false,
+            headerTitle: "",
+          }}
+        />
+        <Stack.Screen
+          name="Add"
+          component={addScreen}
+          navigation={navigation}
+        />
+        <Stack.Screen
+          options={{ title: "New Post" }}
+          name="Save"
+          component={SaveScreen}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }

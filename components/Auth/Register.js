@@ -50,10 +50,6 @@ export default function signup({ navigation }) {
             label: "Ok",
             onPress: () => setVisible(false),
           },
-          {
-            label: "Learn more",
-            onPress: () => setVisible(false),
-          },
         ]}
         contentStyle={{
           backgroundColor: "#ecc",

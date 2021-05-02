@@ -43,9 +43,9 @@ const Save = (props) => {
   };
 
   const savePostData = (downloadURL) => {
-    db.collection("post")
+    db.collection("posts")
       .doc(auth.currentUser.uid)
-      .collection("userPost")
+      .collection("userPosts")
       .add({
         downloadURL,
         caption,

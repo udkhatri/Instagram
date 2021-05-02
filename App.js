@@ -5,8 +5,9 @@ import {
   Provider as PaperProvider,
   Colors,
 } from "react-native-paper";
-
+import Constants from "expo-constants";
 import App1 from "./Navigation/App1";
+import { StyleSheet } from "react-native";
 const theme = {
   ...DefaultTheme,
   roundness: 9,
@@ -14,12 +15,18 @@ const theme = {
     ...DefaultTheme.colors,
     primary: "#1f1f1f",
     accent: "#f1c40f",
+    light: "#fff",
   },
 };
 export default function App() {
   return (
     <PaperProvider theme={theme}>
-      <App1 />
+      <App1 style={styles.droidSafeArea} />
     </PaperProvider>
   );
 }
+const styles = StyleSheet.create({
+  droidSafeArea: {
+    paddingTop: Constants.statusBarHeight,
+  },
+});
