@@ -46,6 +46,7 @@ const main = () => {
         inactiveTintColor: "black",
         showLabel: false,
         activeBackgroundColor: "#f1f1f1",
+        keyboardHidesTabBar: true,
       }}
     >
       <Tab.Screen

@@ -13,10 +13,12 @@ import ForgotPW from "../components/Auth/ForgotPW";
 import MainScreen from "../components/main";
 import addScreen from "../components/Main/add";
 import SaveScreen from "../components/Main/Save";
+import userProfile from "../components/Main/userProfile";
 //components and redux
 import { auth, db } from "../firebase";
 import { Text, View } from "react-native";
 import { ActivityIndicator, Colors } from "react-native-paper";
+import userPosts from "../components/Main/userPosts";
 
 const Stack = createStackNavigator();
 
@@ -97,9 +99,23 @@ export default function App1({ navigation }) {
           navigation={navigation}
         />
         <Stack.Screen
+          name="userPosts"
+          options={{
+            headerBackTitle: "Posts",
+          }}
+          component={userPosts}
+          navigation={navigation}
+        />
+        <Stack.Screen
           options={{ title: "New Post" }}
           name="Save"
           component={SaveScreen}
+        />
+        <Stack.Screen
+          options={{ title: "New Post" }}
+          name="userProfile"
+          component={userProfile}
+          navigation={navigation}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -15,14 +15,22 @@ export const fetchUser = async () => {
     });
 };
 export const fetchUserPosts = async () => {
+  let posts, url, caption;
   await db
-    .collection("post")
+    .collection("posts")
     .doc(auth.currentUser.uid)
-    .collection("userPost")
+    .collection("userPosts")
     .orderBy("creation", "asc")
     .get()
     .then((snapshot) => {
-      console.log("snap posts");
-      console.log(snapshot.docs);
+      posts = snapshot.docs.map((doc) => {
+        const data = doc.data();
+        url = data.downloadURL;
+        caption = data.caption;
+        //console.log(data.downloadURL);
+        const id = doc.id;
+        return { id, ...data };
+      });
     });
+  return posts;
 };

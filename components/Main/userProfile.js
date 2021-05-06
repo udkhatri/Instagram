@@ -13,7 +13,7 @@ import {
   Button,
   Avatar,
   Text,
-  Divider,
+  DefaultTheme,
   Appbar,
   ActivityIndicator,
   Caption,
@@ -35,7 +35,8 @@ const logout = () => {
     });
 };
 
-const profile = ({ navigation }) => {
+const userProfile = ({ navigation, route }, props) => {
+  const { uid, uname } = route.params;
   const width = useWindowDimensions().width;
   const [post, setpost] = useState([]);
   const [user, setUser] = useState({});
@@ -44,14 +45,12 @@ const profile = ({ navigation }) => {
   const fetchUser = async () => {
     await db
       .collection("users")
-      .doc(auth.currentUser.uid)
+      .doc(uid)
       .get()
       .then((snapshot) => {
         if (snapshot.exists) {
           let userData = snapshot.data();
           setUser(userData);
-          console.log(user);
-          // console.log(userData);
         } else {
           console.log("errors: snapshot not exist");
         }
@@ -61,7 +60,7 @@ const profile = ({ navigation }) => {
   const fetchUserPosts = async () => {
     await db
       .collection("posts")
-      .doc(auth.currentUser.uid)
+      .doc(uid)
       .collection("userPosts")
       .orderBy("creation", "asc")
       .get()
@@ -79,23 +78,9 @@ const profile = ({ navigation }) => {
   useEffect(() => {
     fetchUser();
     fetchUserPosts();
+    navigation.setOptions({ title: uname });
   }, []);
   //console.log(data + "it is data");
-  const createTwoButtonAlert = () => {
-    Alert.alert("Log Out", "Are you sure?", [
-      {
-        text: "Cancel",
-        onPress: () => console.log("Cancel Pressed"),
-        style: "cancel",
-      },
-      {
-        text: "Yes",
-        onPress: () => {
-          logout();
-        },
-      },
-    ]);
-  };
   const postsScreen = () => {
     return !loading ? (
       <FlatList
@@ -139,8 +124,8 @@ const profile = ({ navigation }) => {
   };
   const postsTaggedScreen = () => {
     return (
-      <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
-        <Caption>No one has tagged you in any posts</Caption>
+      <View style={styles.centerContent}>
+        <Caption>No one has tagged {uname} in any posts</Caption>
         <Caption>(page is under development)</Caption>
       </View>
     );
@@ -149,11 +134,7 @@ const profile = ({ navigation }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       {/* header */}
-      <Appbar.Header style={{ backgroundColor: "#fff" }}>
-        <Appbar.Content title={user.Name} />
-        <Appbar.Action icon="logout" onPress={createTwoButtonAlert} />
-        <Appbar.Action icon="dots-vertical" />
-      </Appbar.Header>
+
       <View style={styles.topContainer}>
         <View style={styles.userRaw}>
           <Avatar.Image
@@ -178,18 +159,25 @@ const profile = ({ navigation }) => {
           <Text style={{ fontWeight: "bold" }}>{user.Name}</Text>
           <Text>{user.Email}</Text>
           <Text>{user.num}</Text>
-
+        </View>
+        <View style={styles.parent}>
           <Button
-            mode="outlined"
+            style={styles.button}
             uppercase={false}
-            contentStyle={{ marginVertical: -3 }}
-            style={{
-              // borderWidth: 1.5,
-              // borderColor: "black",
-              marginVertical: 5,
+            mode="contained"
+            theme={{
+              colors: {
+                ...DefaultTheme.colors,
+                primary: "#4285f4",
+                accent: "#f1c40f",
+              },
             }}
           >
-            Edit Profile
+            Follow
+          </Button>
+
+          <Button style={styles.button} uppercase={false} mode="outlined">
+            Message
           </Button>
         </View>
       </View>
@@ -241,6 +229,12 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     alignItems: "center",
   },
+  button: {
+    //padding: 18,
+    width: "48%",
+    borderRadius: 5,
+    //height: 60,
+  },
   editProfile: {
     marginHorizontal: 10,
   },
@@ -249,6 +243,15 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     // width: useWindowDimensions().width / 3,
   },
+  container: {
+    flex: 1,
+  },
+  parent: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginHorizontal: 6,
+    paddingTop: 15,
+  },
   centerContent: { justifyContent: "center", alignItems: "center", flex: 1 },
 });
-export default profile;
+export default userProfile;

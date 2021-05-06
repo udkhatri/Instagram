@@ -1,10 +1,16 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, useWindowDimensions } from "react-native";
 import { Appbar } from "react-native-paper";
-
+import PostCard from "../reusable/PostCard";
+const users = [
+  {
+    name: "brynn",
+    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg",
+  },
+];
 const feed = () => {
   return (
-    <View>
+    <View style={{ backgroundColor: "#fff", flex: 1 }}>
       <Appbar.Header
         style={{ backgroundColor: "#fff", justifyContent: "space-between" }}
       >
@@ -20,6 +26,10 @@ const feed = () => {
           onPress={console.log("press")}
         />
       </Appbar.Header>
+
+      {/* header complete */}
+
+      <PostCard userName="Uday Khatri" likes="250" caption="hakunamatata" />
       <Text>feed screen</Text>
     </View>
   );
