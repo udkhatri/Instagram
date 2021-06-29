@@ -16,6 +16,9 @@ import { Feather } from "@expo/vector-icons";
 import { SearchBar } from "react-native-elements";
 import { db, fs, auth } from "../../firebase";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+
 const search = (props) => {
   const [user, setUser] = useState([]);
   const [userName, setUserName] = useState("");

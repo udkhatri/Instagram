@@ -2,14 +2,15 @@ import firebase from "firebase/app";
 import "firebase/firestore";
 import "firebase/auth";
 
-const firebaseConfig = {
+var firebaseConfig = {
   apiKey: "AIzaSyC40Hl4ARN43txaclwhEWT2MouUof7ypgY",
   authDomain: "instagram-8928a.firebaseapp.com",
+  databaseURL: "https://instagram-8928a-default-rtdb.firebaseio.com",
   projectId: "instagram-8928a",
   storageBucket: "instagram-8928a.appspot.com",
   messagingSenderId: "117417708342",
-  appId: "1:117417708342:web:58d8a428a56c93e128c197",
-  measurementId: "G-1NHZVTTGKY",
+  appId: "1:117417708342:web:349fd7db250b2acb28c197",
+  measurementId: "G-BQ0L3MWQR5"
 };
 
 let app;

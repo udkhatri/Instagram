@@ -2,35 +2,26 @@ import React from "react";
 import { View, Text, Image, useWindowDimensions } from "react-native";
 import { Appbar } from "react-native-paper";
 import PostCard from "../reusable/PostCard";
-const users = [
-  {
-    name: "brynn",
-    avatar: "https://s3.amazonaws.com/uifaces/faces/twitter/brynn/128.jpg",
-  },
-];
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import HomeScreen from "./homeScreen";
+import { BackgroundImage } from "react-native-elements/dist/config";
+const Tab = createMaterialTopTabNavigator();
+
+const ChatScreen = () => {
+  return <Text>Chat sreen</Text>;
+};
+const StoryScreen = () => {
+  return <Text>Story sreen</Text>;
+};
 const feed = () => {
   return (
     <View style={{ backgroundColor: "#fff", flex: 1 }}>
-      <Appbar.Header
-        style={{ backgroundColor: "#fff", justifyContent: "space-between" }}
-      >
-        <Appbar.Action icon="instagram" onPress={console.log("press")} />
-
-        <Image
-          source={require("../../assets/insta.png")}
-          style={{ height: 39, width: 120 }}
-        />
-
-        <Appbar.Action
-          icon="facebook-messenger"
-          onPress={console.log("press")}
-        />
-      </Appbar.Header>
-
       {/* header complete */}
-
-      <PostCard userName="Uday Khatri" likes="250" caption="hakunamatata" />
-      <Text>feed screen</Text>
+      <Tab.Navigator tabBar={() => {}} initialRouteName="HomeScreen">
+        <Tab.Screen name="StoryScreen" component={StoryScreen} />
+        <Tab.Screen name="HomeScreen" component={HomeScreen} />
+        <Tab.Screen name="ChatScreen" component={ChatScreen} />
+      </Tab.Navigator>
     </View>
   );
 };

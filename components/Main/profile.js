@@ -1,28 +1,32 @@
 import React, { useEffect, useState } from "react";
 import {
   View,
-  Image,
   StyleSheet,
   SafeAreaView,
   Alert,
   FlatList,
   useWindowDimensions,
   TouchableOpacity,
+  Image,
 } from "react-native";
+
 import {
   Button,
   Avatar,
-  Text,
   Divider,
   Appbar,
   ActivityIndicator,
+  IconButton,
   Caption,
 } from "react-native-paper";
+import { Text } from "react-native-elements";
 
 import { auth, db, fs } from "../../firebase";
 import Constants from "expo-constants";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { Icon } from "react-native-elements";
+
 const Tab = createMaterialTopTabNavigator();
 const logout = () => {
   auth
@@ -35,7 +39,7 @@ const logout = () => {
     });
 };
 
-const profile = ({ navigation }) => {
+const profile = ({ navigation }, props) => {
   const width = useWindowDimensions().width;
   const [post, setpost] = useState([]);
   const [user, setUser] = useState({});
@@ -113,6 +117,13 @@ const profile = ({ navigation }) => {
             }}
           >
             <Image
+              PlaceholderContent={
+                <ActivityIndicator
+                  animating={true}
+                  color={"gray"}
+                  size="small"
+                />
+              }
               source={{
                 uri: item.downloadURL,
               }}
@@ -147,50 +158,130 @@ const profile = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
       {/* header */}
-      <Appbar.Header style={{ backgroundColor: "#fff" }}>
-        <Appbar.Content title={user.Name} />
-        <Appbar.Action icon="logout" onPress={createTwoButtonAlert} />
-        <Appbar.Action icon="dots-vertical" />
-      </Appbar.Header>
-      <View style={styles.topContainer}>
+      <View>
+        <Appbar.Header
+          style={{
+            backgroundColor: "transparent",
+            elevation: 0,
+            position: "absolute",
+            top: 0,
+            right: 0,
+            zIndex: 999,
+          }}
+        >
+          <Appbar.Action icon="cog" />
+          <Appbar.Action icon="dots-vertical" />
+        </Appbar.Header>
+        {/* Cover pic setion */}
+        <View>
+          <Image
+            source={require("../../assets/background.jpg")}
+            style={{
+              height: useWindowDimensions().height / 3.5,
+              width: useWindowDimensions().width,
+              // position: "absolute",
+            }}
+          />
+          <IconButton
+            icon="pencil"
+            style={{
+              position: "absolute",
+              backgroundColor: "#fff9",
+              bottom: -3,
+              right: 1,
+              elevation: 5,
+            }}
+            onPress={() => {
+              console.log("press");
+            }}
+            size={20}
+          />
+        </View>
+
         <View style={styles.userRaw}>
+          <View style={{ alignItems: "center" }}>
+            <Text style={{ fontWeight: "bold", fontSize: 16 }}>245</Text>
+            <Caption style={{ marginTop: -5 }}>Followers</Caption>
+          </View>
           <Avatar.Image
+            style={{ elevation: 10 }}
             size={90}
             source={require("../../assets/favicon.png")}
           />
+
           <View style={{ alignItems: "center" }}>
-            <Text style={{ fontWeight: "bold", fontSize: 18 }}>245</Text>
-            <Text>Posts</Text>
-          </View>
-          <View style={{ alignItems: "center" }}>
-            <Text style={{ fontWeight: "bold", fontSize: 18 }}>245</Text>
-            <Text>Followers</Text>
-          </View>
-          <View style={{ alignItems: "center" }}>
-            <Text style={{ fontWeight: "bold", fontSize: 18 }}>245</Text>
-            <Text>Following</Text>
+            <Text style={{ fontWeight: "bold", fontSize: 16 }}>245</Text>
+            <Caption style={{ marginTop: -5 }}>Following</Caption>
           </View>
         </View>
-        <View style={styles.editProfile}>
-          {/* pass name veriable fetched from backend */}
-          <Text style={{ fontWeight: "bold" }}>{user.Name}</Text>
-          <Text>{user.Email}</Text>
-          <Text>{user.num}</Text>
 
-          <Button
-            mode="outlined"
-            uppercase={false}
-            contentStyle={{ marginVertical: -3 }}
-            style={{
-              // borderWidth: 1.5,
-              // borderColor: "black",
-              marginVertical: 5,
-            }}
+        {/*  name and post */}
+        <View style={styles.userNameRaw}>
+          <View style={{ alignItems: "flex-end", flex: 1 }}>
+            <Text style={{ fontWeight: "bold", fontSize: 18 }}>
+              {user.Name}
+            </Text>
+            {/* <Caption style={{ marginTop: -5 }}>{user.Email}</Caption> */}
+          </View>
+          <Text
+            style={{ marginTop: -5, color: "#cfcfcf", paddingHorizontal: 20 }}
+            h3
           >
-            Edit Profile
-          </Button>
+            |
+          </Text>
+          <View style={{ alignItems: "flex-start", flex: 1 }}>
+            <Text style={{ fontWeight: "bold", fontSize: 18 }}>245</Text>
+            <Caption style={{ marginTop: -5 }}>Posts</Caption>
+          </View>
+        </View>
+        <View
+          style={{
+            paddingHorizontal: 30,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <Caption>
+            Simplicity is the key to happiness. In a world of darkness look up
+            at the stars All I do is win, win, win.
+          </Caption>
+        </View>
+
+        <View style={styles.editProfile}>
+          <Icon
+            raised
+            reverse
+            name="account-edit"
+            type="material-community"
+            color="#84a59d"
+            onPress={() => console.log("hello")}
+          />
+          <Icon
+            raised
+            reverse
+            name="cog"
+            type="material-community"
+            color="#84a59d"
+            onPress={() => console.log("hello")}
+          />
+          <Icon
+            raised
+            reverse
+            name="email"
+            type="material-community"
+            color="#84a59d"
+            onPress={() => console.log("hello")}
+          />
+          <Icon
+            raised
+            reverse
+            name="logout"
+            type="material-community"
+            color="#84a59d"
+            onPress={createTwoButtonAlert}
+          />
         </View>
       </View>
 
@@ -199,9 +290,13 @@ const profile = ({ navigation }) => {
         tabBarOptions={{
           showIcon: true,
           showLabel: false,
-          activeTintColor: "black",
+          activeTintColor: "#84a59d",
           inactiveTintColor: "gray",
-          indicatorStyle: { backgroundColor: "black" },
+          indicatorStyle: {
+            height: 2,
+            backgroundColor: "#84a59d",
+            // marginLeft: 10,
+          },
         }}
       >
         <Tab.Screen
@@ -232,17 +327,29 @@ const styles = StyleSheet.create({
     paddingTop: Constants.statusBarHeight,
   },
   topContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: "transparent",
+    paddingTop: "30%",
   },
   userRaw: {
+    marginTop: -45,
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-around",
     marginHorizontal: 20,
-    marginVertical: 10,
+    marginBottom: 10,
+    alignItems: "flex-end",
+  },
+  userNameRaw: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginHorizontal: 20,
+    marginBottom: 10,
     alignItems: "center",
   },
   editProfile: {
     marginHorizontal: 10,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
   },
   images: {
     flex: 1,

@@ -7,12 +7,22 @@ import {
   Title,
   IconButton,
   Paragraph,
+  ActivityIndicator,
 } from "react-native-paper";
+import { Image } from "react-native-elements";
 import { MaterialCommunityIcons, Feather } from "@expo/vector-icons";
+import { Icon } from "react-native-elements";
 
 const PostCard = (props) => {
   return (
-    <Card style={{ borderRadius: 0 }}>
+    <Card
+      style={{
+        borderRadius: 15,
+        backgroundColor: "#ffffffaa",
+        margin: 5,
+        elevation: 0,
+      }}
+    >
       <Card.Title
         style={{ marginVertical: -5, backgroundcolor: "white" }}
         titleStyle={{ fontSize: 18, fontWeight: "bold", marginBottom: 0 }}
@@ -28,35 +38,69 @@ const PostCard = (props) => {
         )}
         rightStyle={{ backgroundColor: "#faaaa", borderRadius: 0 }}
       />
-      <Card.Cover
-        source={{
-          uri: props.url,
-        }}
-        style={{ height: useWindowDimensions().width }}
-      />
+      <View style={{ alignItems: "center", justifyContent: "center" }}>
+        {props.url ? (
+          <Card.Cover
+            source={{
+              uri: props.url,
+            }}
+            style={{
+              height: useWindowDimensions().width - 10,
+              width: "95%",
+              justifyContent: "space-around",
+              elevation: 5,
+              borderRadius: 15,
+            }}
+          />
+        ) : (
+          <Image
+            style={{
+              height: useWindowDimensions().width - 10,
+              width: useWindowDimensions().width - 20,
+              justifyContent: "space-around",
+
+              borderRadius: 15,
+            }}
+            PlaceholderContent={<ActivityIndicator size="large" />}
+          />
+        )}
+      </View>
 
       <Card.Actions
         style={{ justifyContent: "space-between", paddingHorizontal: 15 }}
       >
         <View style={{ flexDirection: "row" }}>
-          <MaterialCommunityIcons
-            style={{ paddingRight: 15 }}
-            name="heart-outline"
-            size={30}
-            color="black"
+          <IconButton
+            {...props}
+            icon="heart-outline"
+            onPress={() => {}}
+            style={{ elevation: 5, backgroundColor: "white" }}
           />
-          <MaterialCommunityIcons
-            style={{ paddingRight: 15 }}
-            name="comment-outline"
-            size={30}
-            color="black"
+
+          <IconButton
+            {...props}
+            icon="message-outline"
+            onPress={() => {}}
+            style={{ elevation: 5, backgroundColor: "white" }}
           />
-          <Feather name="send" size={30} color="black" />
+          <IconButton
+            {...props}
+            icon={({ color }) => (
+              <Feather name="send" size={22} color={color} />
+            )}
+            onPress={() => {}}
+            style={{ elevation: 5, backgroundColor: "white" }}
+          />
         </View>
 
-        <Feather name="bookmark" size={30} color="black" />
+        <IconButton
+          {...props}
+          icon="bookmark-outline"
+          onPress={() => {}}
+          style={{ elevation: 5, backgroundColor: "white" }}
+        />
       </Card.Actions>
-      <Card.Content style={{ marginVertical: -10 }}>
+      <Card.Content style={{ marginVertical: -10, marginBottom: -20 }}>
         <Title>
           <Text style={{ fontWeight: "bold" }}>{props.likes}</Text> Likes
         </Title>

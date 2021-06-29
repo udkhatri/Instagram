@@ -1,10 +1,23 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Image } from "react-native";
 import { Button, Colors, Divider, DefaultTheme } from "react-native-paper";
 
 const Landing = ({ navigation }) => {
   return (
     <View style={styles.container}>
+      <View
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          flex: 1,
+        }}
+      >
+        <Image
+          source={require("../../assets/insta4.png")}
+          style={{ height: 100, width: 300 }}
+        />
+      </View>
+
       <Button
         style={styles.button}
         mode="contained"
@@ -61,6 +74,7 @@ const Landing = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     marginHorizontal: 9,
     width: "90%",
     bottom: 20,

@@ -35,10 +35,10 @@ export default function App1({ navigation }) {
         // setEmailVerified(false);
         // console.log(emailVerified + " is verification status");
       } else {
-        setLogin(true);
-        setLoaded(true);
-        // setEmailVerified(true);
-        // console.log(emailVerified + " is verification status");
+        if (user.emailVerified) {
+          setLogin(true);
+          setLoaded(true);
+        }
       }
     });
   }, []);
@@ -101,7 +101,8 @@ export default function App1({ navigation }) {
         <Stack.Screen
           name="userPosts"
           options={{
-            headerBackTitle: "Posts",
+            headerTitle: "Posts",
+            title: "Posts",
           }}
           component={userPosts}
           navigation={navigation}
@@ -112,7 +113,10 @@ export default function App1({ navigation }) {
           component={SaveScreen}
         />
         <Stack.Screen
-          options={{ title: "New Post" }}
+          options={{
+            title: "New Post",
+            headerStyle: { backgroundColor: "#0000", elevation: 0 },
+          }}
           name="userProfile"
           component={userProfile}
           navigation={navigation}
